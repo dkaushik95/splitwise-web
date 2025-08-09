@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import { supabase } from "@/lib/supabaseClient";
+
 import { SummaryCard } from "@/components/SummaryCard";
+import { getSupabase } from "@/lib/supabaseClient";
+import { useParams } from "next/navigation";
 
 export default function ShareViewPage() {
   const params = useParams<{ token: string }>();
@@ -12,6 +13,7 @@ export default function ShareViewPage() {
 
   useEffect(() => {
     (async () => {
+      const supabase = getSupabase();
       const { data } = await supabase
         .from("receipts")
         .select("id")

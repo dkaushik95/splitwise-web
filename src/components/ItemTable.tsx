@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabaseClient";
+
+import { getSupabase } from "@/lib/supabaseClient";
 
 type Item = {
   id: string;
@@ -16,20 +17,20 @@ type Item = {
 export function ItemTable({ receiptId }: { receiptId: string }) {
   const [items, setItems] = useState<Item[]>([]);
 
-  async function load() {
-    const { data, error } = await supabase
-      .from("receipt_items")
-      .select("*")
-      .eq("receipt_id", receiptId)
-      .order("line_index", { ascending: true });
-    if (!error && data) setItems(data as Item[]);
-  }
-
   useEffect(() => {
-    load();
+    (async () => {
+      const supabase = getSupabase();
+      const { data, error } = await supabase
+        .from("receipt_items")
+        .select("*")
+        .eq("receipt_id", receiptId)
+        .order("line_index", { ascending: true });
+      if (!error && data) setItems(data as Item[]);
+    })();
   }, [receiptId]);
 
   async function updateField(id: string, field: keyof Item, value: string | number) {
+    const supabase = getSupabase();
     const { error } = await supabase.from("receipt_items").update({ [field]: value }).eq("id", id);
     if (error) console.error(error);
   }

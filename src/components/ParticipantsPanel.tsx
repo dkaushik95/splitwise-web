@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabaseClient";
+
+import { getSupabase } from "@/lib/supabaseClient";
 
 type Participant = { id: string; name: string };
 
@@ -9,19 +10,30 @@ export function ParticipantsPanel({ receiptId }: { receiptId: string }) {
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [name, setName] = useState("");
 
-  async function load() {
-    const { data } = await supabase.from("participants").select("id,name").eq("receipt_id", receiptId).order("name");
-    setParticipants((data || []) as Participant[]);
-  }
   useEffect(() => {
-    load();
+    (async () => {
+      const supabase = getSupabase();
+      const { data } = await supabase
+        .from("participants")
+        .select("id,name")
+        .eq("receipt_id", receiptId)
+        .order("name");
+      setParticipants((data || []) as Participant[]);
+    })();
   }, [receiptId]);
 
   async function add() {
     if (!name.trim()) return;
+    const supabase = getSupabase();
     await supabase.from("participants").insert([{ receipt_id: receiptId, name }]);
     setName("");
-    load();
+    // reload list
+    const { data } = await supabase
+      .from("participants")
+      .select("id,name")
+      .eq("receipt_id", receiptId)
+      .order("name");
+    setParticipants((data || []) as Participant[]);
   }
 
   return (

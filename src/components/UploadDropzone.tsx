@@ -1,6 +1,6 @@
 "use client";
 
-import { supabase } from "@/lib/supabaseClient";
+import { getSupabase } from "@/lib/supabaseClient";
 import { useState } from "react";
 
 type Props = {
@@ -15,6 +15,7 @@ export function UploadDropzone({ onUploaded }: Props) {
     if (!file) return;
     setUploading(true);
     try {
+      const supabase = getSupabase();
       const user = (await supabase.auth.getUser()).data.user;
       if (!user) throw new Error("Not signed in");
       const path = `receipts/${user.id}/${Date.now()}-${file.name}`;

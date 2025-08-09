@@ -1,8 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabaseClient";
+
+import Link from "next/link";
+import { getSupabase } from "@/lib/supabaseClient";
 
 type DashboardReceipt = { id: string; title: string | null; created_at: string };
 
@@ -11,6 +12,7 @@ export default function Home() {
 
   useEffect(() => {
     (async () => {
+      const supabase = getSupabase();
       const { data } = await supabase
         .from("receipts")
         .select("id,title,created_at")

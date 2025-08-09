@@ -1,6 +1,7 @@
-import { supabase } from "./supabaseClient";
+import { getSupabase } from "./supabaseClient";
 
 export function subscribeToReceipt(receiptId: string, onChange: () => void) {
+  const supabase = getSupabase();
   const channel = supabase
     .channel(`receipt-${receiptId}`)
     .on(

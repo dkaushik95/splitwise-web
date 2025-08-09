@@ -1,4 +1,4 @@
-import { supabase } from "./supabaseClient";
+import { getSupabase } from "./supabaseClient";
 
 export type Receipt = {
   id: string;
@@ -16,6 +16,7 @@ export type Receipt = {
 };
 
 export async function createReceipt(ownerId: string, partial?: Partial<Receipt>) {
+  const supabase = getSupabase();
   const { data, error } = await supabase
     .from("receipts")
     .insert([{ owner_id: ownerId, ...partial }])
@@ -26,6 +27,7 @@ export async function createReceipt(ownerId: string, partial?: Partial<Receipt>)
 }
 
 export async function listReceipts() {
+  const supabase = getSupabase();
   const { data, error } = await supabase.from("receipts").select("*").order("created_at", { ascending: false });
   if (error) throw error;
   return data as Receipt[];

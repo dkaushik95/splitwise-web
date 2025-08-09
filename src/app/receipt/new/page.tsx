@@ -1,13 +1,14 @@
 "use client";
 
 import { UploadDropzone } from "@/components/UploadDropzone";
-import { supabase } from "@/lib/supabaseClient";
+import { getSupabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 
 export default function NewReceiptPage() {
   const router = useRouter();
 
   async function handleUploaded(imagePath: string) {
+    const supabase = getSupabase();
     const user = (await supabase.auth.getUser()).data.user;
     if (!user) {
       router.push("/login");
