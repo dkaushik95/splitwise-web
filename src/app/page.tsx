@@ -151,22 +151,27 @@ export default function Home() {
 
         {/* Upload Section */}
         <div className="max-w-2xl mx-auto mb-12">
-          <div className="border-2 border-dashed border-gradient-to-r from-purple-500 to-blue-600 rounded-2xl p-8 md:p-12 text-center bg-gradient-to-br from-gray-900/30 to-gray-800/30 backdrop-blur-sm relative overflow-hidden">
-            {/* Gradient background pattern */}
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-blue-600/5"></div>
+          <div className="relative rounded-2xl p-8 md:p-12 text-center">
+            {/* Gradient background with dashed border effect */}
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 opacity-20"></div>
+            <div className="absolute inset-0 rounded-2xl border-dashed-gradient-purple-pink-orange"></div>
+            <div className="absolute inset-[2px] rounded-2xl bg-black"></div>
             
-            <div className="relative z-10">
-              <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-r from-purple-500 to-blue-600 rounded-2xl flex items-center justify-center">
+            <div className="relative z-10 p-6 md:p-10">
+              <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 rounded-2xl flex items-center justify-center">
                 <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
               </div>
-              <p className="text-lg text-gray-300 mb-6">
-                Got a bill? Toss it in here. Drag and drop or click to upload—we&apos;ll do the heavy lifting.
+              <p className="text-lg text-white mb-2">
+                Got a bill? Toss it in here.
+              </p>
+              <p className="text-sm text-gray-300 mb-6">
+                Drag and drop or click to upload—we&apos;ll do the heavy lifting.
               </p>
               <Link 
                 href="/receipt/new"
-                className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-purple-500 to-blue-600 text-white font-semibold rounded-xl hover:from-purple-600 hover:to-blue-700 transition-all duration-200 transform hover:scale-105 shadow-lg"
+                className="inline-flex items-center px-8 py-3 bg-transparent text-white font-semibold rounded-full transition-all duration-200 transform hover:scale-105 border-gradient-purple-pink-orange"
               >
                 Upload Your Bill
               </Link>

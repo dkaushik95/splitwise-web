@@ -37,6 +37,30 @@ body {
   border: 2px dashed transparent;
 }
 
+/* Purple to pink to orange gradient borders */
+.border-gradient-purple-pink-orange {
+  background: linear-gradient(black, black) padding-box,
+              linear-gradient(to right, #8b5cf6, #ec4899, #f97316) border-box;
+  border: 2px solid transparent;
+}
+
+.border-dashed-gradient-purple-pink-orange {
+  background: linear-gradient(black, black) padding-box,
+              linear-gradient(to right, #8b5cf6, #ec4899, #f97316) border-box;
+  border: 2px dashed transparent;
+  border-style: dashed;
+  border-width: 2px;
+  border-color: transparent;
+}
+
+/* Custom dashed border with more gap */
+.border-dashed-spaced {
+  border-style: dashed;
+  border-width: 2px;
+  border-color: #8b5cf6;
+  border-spacing: 8px;
+}
+
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
