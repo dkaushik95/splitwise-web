@@ -1,7 +1,14 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  async rewrites() {
+    return [
+      {
+        source: '/functions/v1/:path*',
+        destination: 'https://ejimxnpwacaszpnenupr.supabase.co/functions/v1/:path*',
+      },
+    ];
+  },
 };
 
 export default nextConfig;
