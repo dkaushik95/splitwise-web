@@ -5,7 +5,12 @@ import { getSupabase } from "@/lib/supabaseClient";
 export function AuthButton() {
   const signIn = async () => {
     const supabase = getSupabase();
-    await supabase.auth.signInWithOAuth({ provider: "google" });
+    await supabase.auth.signInWithOAuth({ 
+      provider: "google",
+      options: {
+        redirectTo: window.location.origin
+      }
+    });
   };
 
   return (
