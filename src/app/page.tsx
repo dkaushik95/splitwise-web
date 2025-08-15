@@ -23,6 +23,8 @@ export default function Home() {
   const [selectedImage, setSelectedImage] = useState<{ url: string; path: string } | null>(null);
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isDragActive, setIsDragActive] = useState(false);
+  const dragCounter = useRef(0);
   const router = useRouter();
 
   useEffect(() => {
@@ -53,6 +55,52 @@ export default function Home() {
       setLoading(false);
     })();
   }, [router]);
+
+ // Global file drag-and-drop overlay + handlers
+ useEffect(() => {
+   function hasFiles(e: DragEvent) {
+     return Array.from(e.dataTransfer?.types || []).includes("Files");
+   }
+   const onDragOver = (e: DragEvent) => {
+     if (hasFiles(e)) {
+       e.preventDefault();
+     }
+   };
+   const onDragEnter = (e: DragEvent) => {
+     if (!hasFiles(e)) return;
+     e.preventDefault();
+     dragCounter.current += 1;
+     setIsDragActive(true);
+   };
+   const onDragLeave = (e: DragEvent) => {
+     if (!hasFiles(e)) return;
+     dragCounter.current -= 1;
+     if (dragCounter.current <= 0) {
+       setIsDragActive(false);
+     }
+   };
+   const onDrop = async (e: DragEvent) => {
+     if (!hasFiles(e)) return;
+     e.preventDefault();
+     setIsDragActive(false);
+     dragCounter.current = 0;
+     const file = e.dataTransfer?.files?.[0];
+     if (file) {
+       await uploadFile(file);
+     }
+   };
+
+   window.addEventListener("dragover", onDragOver);
+   window.addEventListener("dragenter", onDragEnter);
+   window.addEventListener("dragleave", onDragLeave);
+   window.addEventListener("drop", onDrop);
+   return () => {
+     window.removeEventListener("dragover", onDragOver);
+     window.removeEventListener("dragenter", onDragEnter);
+     window.removeEventListener("dragleave", onDragLeave);
+     window.removeEventListener("drop", onDrop);
+   };
+ }, []);
 
   const handleSignOut = async () => {
     const supabase = getSupabase();
@@ -120,9 +168,7 @@ export default function Home() {
   // New: inline button to open hidden file input
   const handleFileButtonClick = () => fileInputRef.current?.click();
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  async function uploadFile(file: File) {
     setUploading(true);
     try {
       const supabase = getSupabase();
@@ -136,8 +182,14 @@ export default function Home() {
       console.error(err);
     } finally {
       setUploading(false);
-      if (fileInputRef.current) fileInputRef.current.value = "";
     }
+  }
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    await uploadFile(file);
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   // Show loading state while checking authentication
@@ -227,7 +279,7 @@ export default function Home() {
 
         {/* Upload Section */}
         <div className="max-w-3xl mx-auto mb-12">
-          <div className="relative rounded-3xl p-8 md:p-12 text-center min-h-[240px]">
+          <div className={`relative rounded-3xl p-8 md:p-12 text-center min-h-[240px] transition-all ${isDragActive ? "ring-2 ring-purple-500/60 shadow-[0_0_60px_10px_rgba(168,85,247,0.25)]" : ""}`}>
             {/* Gradient background with dashed border effect */}
             <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 opacity-20"></div>
             <div className="absolute inset-0 rounded-3xl border-dashed-gradient-purple-pink-orange"></div>
@@ -369,6 +421,22 @@ export default function Home() {
           </div>
         </div>
       </main>
+
+      {isDragActive && (
+        <div className="fixed inset-0 z-[70] flex items-center justify-center pointer-events-none">
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+          <div className="relative">
+            <div className="absolute -inset-6 rounded-3xl bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400 opacity-40 blur-2xl animate-pulse"></div>
+            <div className="relative px-8 py-6 rounded-2xl border-gradient-purple-pink-orange bg-black/70 text-center shadow-2xl">
+              <svg className="w-10 h-10 text-white mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6H16a4 4 0 010 8h-1m-4-4v8m0 0l-3-3m3 3l3-3" />
+              </svg>
+              <p className="text-xl font-semibold text-white">Drop to upload</p>
+              <p className="text-sm text-gray-300 mt-1">We’ll create a new receipt automatically</p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Image Modal */}
       {selectedImage && (
