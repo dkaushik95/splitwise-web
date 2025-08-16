@@ -26,6 +26,7 @@ export default function Home() {
   const [isDragActive, setIsDragActive] = useState(false);
   const dragCounter = useRef(0);
   const router = useRouter();
+  const [signedUrls, setSignedUrls] = useState<Record<string, string>>({});
 
   useEffect(() => {
     (async () => {
@@ -51,7 +52,21 @@ export default function Home() {
         .select("id,title,created_at,image_path,total")
         .order("created_at", { ascending: false });
 
-      setReceipts((data as DashboardReceipt[]) || []);
+      const list = (data as DashboardReceipt[]) || [];
+      setReceipts(list);
+
+      // Preload signed URLs for thumbnails
+      const paths = list.map((r) => r.image_path).filter(Boolean) as string[];
+      if (paths.length) {
+        const entries = await Promise.all(
+          paths.map(async (p) => {
+            const res = await supabase.storage.from("receipts").createSignedUrl(p, 60 * 60);
+            return [p, res.data?.signedUrl || ""] as const;
+          })
+        );
+        setSignedUrls(Object.fromEntries(entries.filter(([_, url]) => !!url)));
+      }
+
       setLoading(false);
     })();
   }, [router]);
@@ -108,9 +123,11 @@ export default function Home() {
     router.push("/login");
   };
 
-  const getImageUrl = (imagePath: string) => {
+  const getImageUrl = async (imagePath: string) => {
     const supabase = getSupabase();
-    return supabase.storage.from("receipts").getPublicUrl(imagePath).data.publicUrl;
+    const imagePathRes = await supabase.storage.from('receipts').createSignedUrl(imagePath, 60*60)
+
+    return imagePathRes.data?.signedUrl || "";
   };
 
   // Mirrors logic from /receipt/new page; used after local file upload
@@ -357,15 +374,24 @@ export default function Home() {
                   <div className="flex items-center space-x-4">
                     <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center overflow-hidden">
                       {receipt.image_path ? (
-                        <img
-                          src={getImageUrl(receipt.image_path)}
-                          alt="Receipt"
-                          className="w-full h-full object-cover cursor-pointer"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            setSelectedImage({ url: getImageUrl(receipt.image_path!), path: receipt.image_path! });
-                          }}
-                        />
+                        signedUrls[receipt.image_path] ? (
+                          <img
+                            src={signedUrls[receipt.image_path]}
+                            alt="Receipt"
+                            className="w-full h-full object-cover cursor-pointer"
+                            onClick={async (e) => {
+                              e.preventDefault();
+                              const url = signedUrls[receipt.image_path!] || (await getImageUrl(receipt.image_path!));
+                              setSelectedImage({ url, path: receipt.image_path! });
+                            }}
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <svg className="w-6 h-6 text-gray-300 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6l4 2" />
+                            </svg>
+                          </div>
+                        )
                       ) : (
                         <svg className="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path
