@@ -61,10 +61,14 @@ export default function Home() {
         const entries = await Promise.all(
           paths.map(async (p) => {
             const res = await supabase.storage.from("receipts").createSignedUrl(p, 60 * 60);
-            return [p, res.data?.signedUrl || ""] as const;
+            // Only include URLs for files that exist
+            if (res.data?.signedUrl && !res.error) {
+              return [p, res.data.signedUrl] as const;
+            }
+            return null;
           })
         );
-        setSignedUrls(Object.fromEntries(entries.filter(([_, url]) => !!url)));
+        setSignedUrls(Object.fromEntries(entries.filter((entry): entry is [string, string] => entry !== null)));
       }
 
       setLoading(false);
@@ -126,6 +130,11 @@ export default function Home() {
   const getImageUrl = async (imagePath: string) => {
     const supabase = getSupabase();
     const imagePathRes = await supabase.storage.from('receipts').createSignedUrl(imagePath, 60*60)
+
+    if (imagePathRes.error) {
+      console.warn('Failed to get signed URL for image:', imagePath, imagePathRes.error);
+      return "";
+    }
 
     return imagePathRes.data?.signedUrl || "";
   };
