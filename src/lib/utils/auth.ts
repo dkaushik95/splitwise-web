@@ -6,16 +6,6 @@ import { getSupabase } from "@/lib/core/supabaseClient";
  */
 
 /**
- * Checks if a user is currently authenticated
- * @returns Promise<{user: any | null, error: any | null}> - User object if authenticated, null otherwise
- */
-export async function checkUserAuthentication() {
-  const supabase = getSupabase();
-  const { data: { user }, error } = await supabase.auth.getUser();
-  return { user, error };
-}
-
-/**
  * Signs out the current user and redirects to login page
  * @param router - Next.js router instance for navigation
  */

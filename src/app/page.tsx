@@ -10,7 +10,7 @@ import ImageModal from "@/components/ImageModal";
 import ReceiptsList from "@/components/ReceiptsList";
 import UploadSection from "@/components/UploadSection";
 import { User } from '@supabase/supabase-js';
-import { checkUserAuthentication } from "@/lib/utils/auth";
+import { getCurrentUser } from "@/lib/utils/auth";
 import { uploadFile } from "@/lib/utils/fileUpload";
 import { useRouter } from "next/navigation";
 
@@ -28,7 +28,7 @@ export default function Home() {
   useEffect(() => {
     (async () => {
       // Check if user is authenticated
-      const { user, error } = await checkUserAuthentication();
+      const { user, error } = await getCurrentUser();
 
       if (error || !user) {
         // User is not authenticated, redirect to login

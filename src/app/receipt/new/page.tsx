@@ -1,7 +1,7 @@
 "use client";
 
 import { UploadDropzone } from "@/components/UploadDropzone";
-import { getSupabase } from "@/lib/supabaseClient";
+import { getSupabase } from "@/lib/core/supabaseClient";
 import { useRouter } from "next/navigation";
 
 export default function NewReceiptPage() {

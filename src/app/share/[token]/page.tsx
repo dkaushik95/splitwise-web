@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 import { SummaryCard } from "@/components/SummaryCard";
-import { getSupabase } from "@/lib/supabaseClient";
+import { getSupabase } from "@/lib/core/supabaseClient";
 import { useParams } from "next/navigation";
 
 export default function ShareViewPage() {
