@@ -475,27 +475,31 @@ export default function Home() {
 
       {/* Image Modal */}
       {selectedImage && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-900 rounded-lg max-w-4xl max-h-[90vh] overflow-hidden">
-            <div className="flex justify-between items-center p-4 border-b border-gray-700">
-              <h3 className="text-white font-medium">Receipt Image</h3>
-              <div className="flex space-x-2">
-                <button
-                  onClick={() => downloadImage(selectedImage.path)}
-                  className="px-3 py-1 bg-gradient-to-r from-purple-500 to-blue-600 text-white rounded text-sm hover:from-purple-600 hover:to-blue-700 transition-colors"
-                >
-                  Download
-                </button>
-                <button onClick={() => setSelectedImage(null)} className="text-gray-400 hover:text-white transition-colors">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
+        <div className="fixed inset-0 bg-black z-50 flex flex-col">
+          {/* Header */}
+          <div className="flex justify-between items-center p-4 bg-black/90 backdrop-blur-sm border-b border-gray-800">
+            <h3 className="text-white font-medium">Receipt Image</h3>
+            <div className="flex space-x-2">
+              <button
+                onClick={() => downloadImage(selectedImage.path)}
+                className="px-3 py-1 bg-gradient-to-r from-purple-500 to-blue-600 text-white rounded text-sm hover:from-purple-600 hover:to-blue-700 transition-colors"
+              >
+                Download
+              </button>
+              <button onClick={() => setSelectedImage(null)} className="text-gray-400 hover:text-white transition-colors">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
             </div>
-            <div className="p-4">
-              <img src={selectedImage.url} alt="Receipt" className="max-w-full max-h-[70vh] object-contain rounded" />
-            </div>
+          </div>
+          {/* Image Container */}
+          <div className="flex-1 flex items-center justify-center p-4 overflow-auto">
+            <img
+              src={selectedImage.url}
+              alt="Receipt"
+              className="w-full h-full object-contain"
+            />
           </div>
         </div>
       )}
