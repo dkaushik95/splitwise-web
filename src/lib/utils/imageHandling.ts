@@ -1,4 +1,4 @@
-import { getSupabase } from "@/lib/supabaseClient";
+import { getSupabase } from "@/lib/core/supabaseClient";
 
 /**
  * Image handling utility functions for managing receipt images

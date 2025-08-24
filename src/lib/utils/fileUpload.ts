@@ -1,7 +1,7 @@
 import { createReceipt, triggerReceiptProcessing } from "./dataFetching";
 
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
-import { getSupabase } from "@/lib/supabaseClient";
+import { getSupabase } from "@/lib/core/supabaseClient";
 
 /**
  * File upload utility functions for handling receipt image uploads

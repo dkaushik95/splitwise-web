@@ -1,6 +1,6 @@
 "use client";
 
-import { getSupabase } from "@/lib/supabaseClient";
+import { getSupabase } from "@/lib/core/supabaseClient";
 import { useState } from "react";
 
 type Props = {

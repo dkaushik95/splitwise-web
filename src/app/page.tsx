@@ -9,6 +9,7 @@ import HeroSection from "@/components/HeroSection";
 import ImageModal from "@/components/ImageModal";
 import ReceiptsList from "@/components/ReceiptsList";
 import UploadSection from "@/components/UploadSection";
+import { User } from '@supabase/supabase-js';
 import { checkUserAuthentication } from "@/lib/utils/auth";
 import { uploadFile } from "@/lib/utils/fileUpload";
 import { useRouter } from "next/navigation";
@@ -16,7 +17,7 @@ import { useRouter } from "next/navigation";
 export default function Home() {
   const [receipts, setReceipts] = useState<DashboardReceipt[]>([]);
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<{ user_metadata?: { full_name?: string } } | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [selectedImage, setSelectedImage] = useState<{ url: string; path: string } | null>(null);
   const [uploading, setUploading] = useState(false);
   const [isDragActive, setIsDragActive] = useState(false);
@@ -78,7 +79,7 @@ export default function Home() {
      if (file && user) {
        setUploading(true);
        try {
-         await uploadFile(file, (user as any).id, router);
+         await uploadFile(file, user.id, router);
        } catch (error) {
          console.error("Upload error:", error);
        } finally {
@@ -126,7 +127,7 @@ export default function Home() {
 
         {user && (
           <UploadSection
-            userId={(user as any).id}
+            userId={user.id}
             router={router}
             uploading={uploading}
             setUploading={setUploading}

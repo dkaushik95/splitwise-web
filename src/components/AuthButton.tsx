@@ -1,6 +1,6 @@
 "use client";
 
-import { getSupabase } from "@/lib/supabaseClient";
+import { getSupabase } from "@/lib//core/supabaseClient";
 
 export function AuthButton() {
   const signIn = async () => {

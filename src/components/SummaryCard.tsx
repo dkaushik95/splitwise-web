@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 
-import { computeTotals } from "@/lib/compute";
-import { getSupabase } from "@/lib/supabaseClient";
+import { computeTotals } from "@/lib/business-logic/compute";
+import { getSupabase } from "@/lib/core/supabaseClient";
 
 export function SummaryCard({ receiptId }: { receiptId: string }) {
   type Assignment = {

@@ -1,7 +1,6 @@
-import { downloadImage, generateImageFileName, getCachedOrFetchImageUrl, triggerImageDownload } from "@/lib/utils/imageHandling";
-
 import { DashboardReceipt } from "@/lib/utils/dataFetching";
 import Link from "next/link";
+import { getCachedOrFetchImageUrl } from "@/lib/utils/imageHandling";
 
 interface ReceiptsListProps {
   receipts: DashboardReceipt[];
@@ -20,7 +19,6 @@ interface ReceiptsListProps {
 export default function ReceiptsList({
   receipts,
   signedUrls,
-  setSignedUrls,
   setSelectedImage
 }: ReceiptsListProps) {
   const handleImageClick = async (e: React.MouseEvent, receipt: DashboardReceipt) => {
@@ -30,13 +28,6 @@ export default function ReceiptsList({
     const { url } = await getCachedOrFetchImageUrl(receipt.image_path, signedUrls);
     if (url) {
       setSelectedImage({ url, path: receipt.image_path });
-    }
-  };
-
-  const handleDownload = async (imagePath: string) => {
-    const { data } = await downloadImage(imagePath);
-    if (data) {
-      triggerImageDownload(data, generateImageFileName(imagePath));
     }
   };
 

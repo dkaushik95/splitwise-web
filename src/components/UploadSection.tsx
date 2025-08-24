@@ -67,7 +67,7 @@ export default function UploadSection({
             </svg>
           </div>
           <p className="text-lg text-white mb-1">Got a bill? Toss it in here.</p>
-          <p className="text-sm text-gray-300 mb-6">Drag and drop or click to upload—we'll do the heavy lifting.</p>
+          <p className="text-sm text-gray-300 mb-6">Drag and drop or click to upload—we&apos;ll do the heavy lifting.</p>
 
           <button
             onClick={handleFileButtonClick}

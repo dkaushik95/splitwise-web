@@ -1,4 +1,4 @@
-import { getSupabase } from "@/lib/supabaseClient";
+import { getSupabase } from "@/lib/core/supabaseClient";
 
 export type DashboardReceipt = {
   id: string;

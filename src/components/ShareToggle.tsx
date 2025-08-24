@@ -1,7 +1,7 @@
 "use client";
 
+import { callCreateShareLink } from "@/lib/services/edge";
 import { useState } from "react";
-import { callCreateShareLink } from "@/lib/edge";
 
 export function ShareToggle({ receiptId }: { receiptId: string }) {
   const [url, setUrl] = useState<string | null>(null);

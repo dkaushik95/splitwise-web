@@ -1,7 +1,7 @@
 "use client";
 
+import { callMapAssignments } from "@/lib/services/edge";
 import { useState } from "react";
-import { callMapAssignments } from "@/lib/edge";
 
 export function PromptAssign({ receiptId }: { receiptId: string }) {
   const [text, setText] = useState("");
