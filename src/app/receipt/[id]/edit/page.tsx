@@ -44,12 +44,14 @@ export default function EditReceiptPage() {
           </button>
 
           <div className="relative">
-            <button
-              onClick={() => setShowShare((s) => !s)}
-              className="rounded-full border border-white/10 bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-400 px-4 py-2 text-sm font-medium text-black shadow-[0_0_0_1px_rgba(255,255,255,0.15)_inset] hover:brightness-110 transition"
-            >
-              Get Shareable Link
-            </button>
+            <div className="rounded-full p-[2px] bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-400">
+              <button
+                onClick={() => setShowShare((s) => !s)}
+                className="rounded-full bg-black/80 px-4 py-2 text-sm font-medium text-white hover:bg-black/90 transition"
+              >
+                Get Shareable Link
+              </button>
+            </div>
             {showShare && (
               <div className="absolute right-0 mt-3 w-[320px] rounded-xl border border-white/10 bg-black/80 backdrop-blur p-4 shadow-xl">
                 {/* Functionality stub: share controls popover */}
