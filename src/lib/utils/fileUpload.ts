@@ -36,7 +36,6 @@ export async function uploadFile(file: File, userId: string, router: AppRouterIn
  * @param router - Next.js router instance for navigation
  */
 export async function handleUploaded(imagePath: string, userId: string, router: AppRouterInstance) {
-  const supabase = getSupabase();
 
   // Create receipt row
   const { receipt, error } = await createReceipt(imagePath, userId);

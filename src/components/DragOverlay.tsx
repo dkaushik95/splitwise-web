@@ -19,7 +19,7 @@ export default function DragOverlay({ isDragActive }: DragOverlayProps) {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6H16a4 4 0 010 8h-1m-4-4v8m0 0l-3-3m3 3l3-3" />
           </svg>
           <p className="text-xl font-semibold text-white">Drop to upload</p>
-          <p className="text-sm text-gray-300 mt-1">We'll create a new receipt automatically</p>
+          <p className="text-sm text-gray-300 mt-1">We&apos;ll create a new receipt automatically</p>
         </div>
       </div>
     </div>

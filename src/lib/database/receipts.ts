@@ -1,4 +1,4 @@
-import { getSupabase } from "./supabaseClient";
+import { getSupabase } from "@/lib/core/supabaseClient";
 
 export type Receipt = {
   id: string;
